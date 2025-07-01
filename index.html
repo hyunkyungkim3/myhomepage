@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중간계AI 스튜디오</title>
+  <!-- 넥슨 폰트 웹폰트 불러오기 -->
+  <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/NEXONLv1Gothic.css" rel="stylesheet" type="text/css" />
+  <style>
+    /* 헤더 전체 스타일 - 배경은 흰색, 폰트는 넥슨, 가로로 나란히, 반응형 */
+    body {
+      margin: 0;
+      font-family: 'NEXON Lv1 Gothic OTF', sans-serif;
+      background: #fff;
+    }
+    .header {
+      display: flex; /* 가로로 나란히 배치 */
+      align-items: center; /* 세로 가운데 정렬 */
+      justify-content: space-between; /* 양쪽 끝과 가운데 정렬 */
+      gap: 10px; /* 사이사이 간격 10px */
+      padding: 10px 30px;
+      background: #fff;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .header-center a {
+      text-decoration: none;
+      color: #222;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header-center a:hover {
+      color: #0078ff;
+    }
+    .header-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    .header-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #222;
+    }
+    .header-login {
+      padding: 6px 18px;
+      background: #fff;
+      border: 2px solid #222;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .header-login:hover {
+      background: #222;
+      color: #fff;
+    }
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 10px;
+      }
+      .header-center {
+        justify-content: center;
+        gap: 10px;
+      }
+      .header-left {
+        justify-content: center;
+      }
+    }
+    /* 히어로 섹션 전체 - 화면 가로로 꽉 차게, 반응형 */
+    .hero {
+      width: 100vw;
+      min-height: 400px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      background: #000;
+    }
+    .carousel {
+      position: relative;
+      width: 100vw;
+      height: 60vw;
+      max-height: 500px;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .carousel-slides {
+      width: 100vw;
+      height: 100%;
+      position: relative;
+      display: flex;
+      transition: transform 0.5s;
+    }
+    .carousel-slide {
+      min-width: 100vw;
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      transition: opacity 0.5s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-slide.active {
+      opacity: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .carousel-img {
+      width: 100vw;
+      height: 60vw;
+      max-height: 500px;
+      min-height: 320px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.7);
+    }
+    .carousel-caption {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      text-align: center;
+      text-shadow: 2px 2px 8px #000, 0 0 10px #222;
+      width: 90vw;
+      max-width: 600px;
+      z-index: 2;
+    }
+    .carousel-caption h1 {
+      font-size: 2.2rem;
+      margin: 0 0 10px 0;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .carousel-caption h2 {
+      font-size: 1.3rem;
+      margin: 0 0 8px 0;
+      font-weight: 500;
+    }
+    .carousel-caption p {
+      font-size: 1.1rem;
+      margin: 0 0 18px 0;
+      font-weight: 400;
+    }
+    .buy-btn {
+      display: inline-block;
+      padding: 10px 28px;
+      background: #fff;
+      color: #222;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-shadow: none;
+    }
+    .buy-btn:hover {
+      background: #222;
+      color: #fff;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #fff;
+      color: #222;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+      opacity: 0.8;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      user-select: none;
+    }
+    .carousel-arrow.left {
+      left: 20px;
+    }
+    .carousel-arrow.right {
+      right: 20px;
+    }
+    .carousel-arrow:hover {
+      background: #222;
+      color: #fff;
+    }
+    /* --- 제품 섹션 스타일 --- */
+    .product-section {
+      max-width: 1200px;
+      margin: 48px auto 0 auto;
+      padding: 0 16px 48px 16px;
+      background: #fff;
+      box-sizing: border-box;
+      font-family: 'NEXON Lv1 Gothic OTF', sans-serif;
+      border-radius: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .shop-main-img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      display: block;
+    }
+    .product-title {
+      font-size: 2.1rem;
+      color: #111;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 36px 0;
+      letter-spacing: 1px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 24px;
+      margin: 0 auto;
+      max-width: 900px;
+    }
+    .product-card {
+      background: #fafbfc;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 22px 16px 28px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 340px;
+      transition: box-shadow 0.2s;
+    }
+    .product-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    .product-img {
+      width: 100%;
+      max-width: 220px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      margin-left: 3px;
+      margin-right: 3px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .product-desc {
+      width: 100%;
+      text-align: left;
+      font-size: 1rem;
+      color: #222;
+      margin-top: 4px;
+      position: relative;
+    }
+    .desc-preview p, .desc-full p {
+      margin: 0 0 4px 0;
+      line-height: 1.5;
+      font-size: 1rem;
+      color: #222;
+    }
+    .more-btn {
+      display: block;
+      margin: 12px auto 0 auto;
+      padding: 7px 22px;
+      background: #fff;
+      border: 1.5px solid #222;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .more-btn:hover {
+      background: #222;
+      color: #fff;
+    }
+    @media (max-width: 900px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .product-card {
+        min-height: 320px;
+      }
+    }
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 10px;
+      }
+      .header-center {
+        justify-content: center;
+        gap: 10px;
+      }
+      .header-left {
+        justify-content: center;
+      }
+      .carousel-img {
+        height: 50vw;
+        min-height: 180px;
+        max-height: 260px;
+      }
+      .carousel-caption h1 {
+        font-size: 1.2rem;
+      }
+      .carousel-caption h2 {
+        font-size: 1rem;
+      }
+      .carousel-caption p {
+        font-size: 0.9rem;
+      }
+      .carousel-arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 1.3rem;
+      }
+    }
+    /* --- 고객 후기 섹션 스타일 --- */
+    .review-section {
+      max-width: 1200px;
+      margin: 48px auto 0 auto;
+      padding: 0 16px 48px 16px;
+      background: #fff;
+      box-sizing: border-box;
+      font-family: 'NEXON Lv1 Gothic OTF', sans-serif;
+    }
+    .review-title {
+      font-size: 2.1rem;
+      color: #111;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 36px 0;
+      letter-spacing: 1px;
+    }
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px 20px;
+      margin: 0 auto;
+      max-width: 1000px;
+    }
+    .review-card {
+      background: #f8f9fa;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 24px 18px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 180px;
+      transition: box-shadow 0.2s, transform 0.1s;
+    }
+    .review-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+      transform: translateY(-2px);
+    }
+    .review-stars {
+      font-size: 1.4rem;
+      color: #FFD700;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+    .review-text {
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.6;
+      margin: 0 0 14px 0;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+    .review-author {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 500;
+      margin-top: auto;
+    }
+    @media (max-width: 900px) {
+      .review-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 16px;
+      }
+    }
+    @media (max-width: 600px) {
+      .review-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .review-card {
+        min-height: 160px;
+      }
+    }
+    /* --- 사장님 인사말 섹션 스타일 --- */
+    .greeting-section {
+      max-width: 1200px;
+      margin: 48px auto 0 auto;
+      padding: 0 16px 48px 16px;
+      background: #fff;
+      box-sizing: border-box;
+      font-family: 'NEXON Lv1 Gothic OTF', sans-serif;
+    }
+    .greeting-title {
+      font-size: 2.1rem;
+      color: #111;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 36px 0;
+      letter-spacing: 1px;
+    }
+    .greeting-container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .greeting-image {
+      flex: 1;
+      max-width: 300px;
+    }
+    .greeting-content {
+      flex: 2;
+      padding-left: 20px;
+    }
+    .greeting-preview p, .greeting-full p {
+      margin: 0 0 8px 0;
+      line-height: 1.6;
+      font-size: 1rem;
+      color: #333;
+    }
+    .ceo-photo {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .ceo-signature {
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 16px;
+      color: #555;
+    }
+    .greeting-toggle-btn {
+      display: block;
+      margin: 16px 0 0 0;
+      padding: 8px 24px;
+      background: #fff;
+      border: 1.5px solid #222;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .greeting-toggle-btn:hover {
+      background: #222;
+      color: #fff;
+    }
+    .contact-info {
+      text-align: center;
+      margin-top: 40px;
+      padding: 24px;
+      background: #f8f9fa;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .contact-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      color: #333;
+    }
+    .contact-phone {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0;
+      color: #0078ff;
+    }
+    @media (max-width: 800px) {
+      .greeting-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .greeting-image {
+        max-width: 250px;
+      }
+      .greeting-content {
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 시작: 모든 요소를 가로로 나란히 배치합니다. -->
+  <header class="header">
+    <!-- 왼쪽: 로고와 브랜드 이름 -->
+    <div class="header-left">
+      <!-- 로고 이미지 (images/logo1.png) -->
+      <img src="images/singane.jpg" alt="로고" class="header-logo">
+      <!-- 브랜드 이름 -->
+      <span class="header-title">신가네칼국수</span>
+    </div>
+    <!-- 가운데: 메뉴 항목들 -->
+    <nav class="header-center">
+      <!-- 제품 메뉴 -->
+      <a href="#product">제품</a>
+      <!-- 고객후기 메뉴 -->
+      <a href="#review">고객후기</a>
+      <!-- 인사말 메뉴 -->
+      <a href="#greeting">인사말</a>
+    </nav>
+    <!-- 오른쪽: 로그인 버튼 -->
+    <button class="header-login">로그인</button>
+  </header>
+  <!-- 헤더 끝 -->
+
+  <!-- 히어로 섹션 시작: 슬라이드 이미지와 텍스트, 버튼이 들어갑니다. -->
+  <section class="hero">
+    <!-- 캐러셀(슬라이드) 전체를 감싸는 div -->
+    <div class="carousel">
+      <!-- 왼쪽 화살표 버튼 -->
+      <button class="carousel-arrow left" aria-label="이전 슬라이드">&#60;</button>
+      <!-- 슬라이드 이미지와 텍스트를 감싸는 div -->
+      <div class="carousel-slides">
+        <!-- 첫 번째 슬라이드 -->
+        <div class="carousel-slide active">
+          <img src="images/hero01.jpg" alt="슬라이드1" class="carousel-img">
+          <div class="carousel-caption">
+            <h1>신가네칼국수</h1>
+            <h2>당신의 아이디어, 브랜드가 되다</h2>
+            <p>브랜드 이름에서부터 웹사이트까지, 사업성공을 함께 합니다</p>
+            <a href="https://smartstore.naver.com/" target="_blank" class="buy-btn">구매하기</a>
+          </div>
+        </div>
+        <!-- 두 번째 슬라이드 -->
+        <div class="carousel-slide">
+          <img src="images/hero02.jpg" alt="슬라이드2" class="carousel-img">
+          <div class="carousel-caption">
+            <h1>중간계 AI 스튜디오</h1>
+            <h2>쉽고 빠르게, 원하는 것을 구축하다</h2>
+            <p>아이디어에서 실현까지 중간계 AI가 함께합니다</p>
+            <a href="https://smartstore.naver.com/" target="_blank" class="buy-btn">구매하기</a>
+          </div>
+        </div>
+        <!-- 세 번째 슬라이드 -->
+        <div class="carousel-slide">
+          <img src="images/hero03.jpg" alt="슬라이드3" class="carousel-img">
+          <div class="carousel-caption">
+            <h1>중간계 AI 스튜디오</h1>
+            <h2>상상력에 날개를, 날아 오르다</h2>
+            <p>꿈이 아니라, 현실이 될 것입니다</p>
+            <a href="https://smartstore.naver.com/" target="_blank" class="buy-btn">구매하기</a>
+          </div>
+        </div>
+      </div>
+      <!-- 오른쪽 화살표 버튼 -->
+      <button class="carousel-arrow right" aria-label="다음 슬라이드">&#62;</button>
+    </div>
+  </section>
+  <!-- 히어로 섹션 끝 -->
+
+  <!-- 제품 섹션 시작: 4가지 상품을 2x2로 보여줍니다. -->
+  <section class="product-section" id="product">
+    <!-- 매장 대표 이미지 -->
+    <img src="images/shop1.jpg" alt="매장 대표 이미지" class="shop-main-img">
+    <!-- 상품 타이틀 -->
+    <h1 class="product-title">중간계 AI 스튜디오 4가지 상품</h1>
+    <!-- 2x2 상품 그리드 -->
+    <div class="product-grid">
+      <!-- 제품 1 -->
+      <div class="product-card">
+        <img src="images/pd1.jpg" alt="AI 상세페이지" class="product-img">
+        <div class="product-desc">
+          <div class="desc-preview">
+            <p>AI,인공지능 추천에 최적화된 상세페이지</p>
+            <p>상세페이지 기획 + 구성 + 디자인</p>
+            <p>고객의 구매 패턴을 분석하여 개인 맞춤형 상품을 구성합니다.</p>
+          </div>
+          <div class="desc-full" style="display:none;">
+            <p>AI,인공지능 추천에 최적화된 상세페이지<br>
+            상세페이지 기획 + 구성 + 디자인<br>
+            고객의 구매 패턴을 분석하여 개인 맞춤형 상품을 구성합니다.<br>
+            AI 추천 알고리즘을 최적화하여, 전환율을 높일수 있는 상세페이지를 제작합니다.<br>
+            기간. 난이도에 따라, 1주일~2주일<br>
+            가격<br>
+            1. 디자인 작업 : 50~80만<br>
+            2. 디자인 + 세부기획 : 100~200만<br>
+            3. 디자인 + 세부기획 + 영상 + 효과 : 200~500만<br>
+            촬영이 필요할 경우,  추가 기간, 비용, 발생</p>
+          </div>
+          <button class="more-btn">더보기</button>
+        </div>
+      </div>
+      <!-- 제품 2 -->
+      <div class="product-card">
+        <img src="images/pd2.jpg" alt="AI 쇼츠, 릴스" class="product-img">
+        <div class="product-desc">
+          <div class="desc-preview">
+            <p>AI,인공지능 추천에 쇼츠,릴스 기획, 제작</p>
+            <p>고객의 제품과 브랜드 특징을 고려하여, 주목도 높은 쇼츠, 릴스를 제작합니다.</p>
+            <p>AI 추천 알고리즘을 최적화하여, 주목도, 전환율을 높일수 있는 쇼츠,릴스입니다.</p>
+          </div>
+          <div class="desc-full" style="display:none;">
+            <p>AI,인공지능 추천에 쇼츠,릴스 기획, 제작<br>
+            고객의 제품과 브랜드 특징을 고려하여, 주목도 높은 쇼츠, 릴스를 제작합니다.<br>
+            AI 추천 알고리즘을 최적화하여, 주목도, 전환율을 높일수 있는 쇼츠,릴스입니다.<br>
+            기간. 난이도에 따라, 1주일~2주일<br>
+            가격<br>
+            1. 단순 편집 : 30~50만<br>
+            2. 기획 + 디자인 + 편집  : 50~100만<br>
+            3. 기획 + 디자인 + 영상 효과 : 100~200만<br>
+            4. 촬영이 필요할 경우,  추가 기간, 비용, 발생</p>
+          </div>
+          <button class="more-btn">더보기</button>
+        </div>
+      </div>
+      <!-- 제품 3 -->
+      <div class="product-card">
+        <img src="images/pd3.jpg" alt="웹페이지, 랜딩페이지" class="product-img">
+        <div class="product-desc">
+          <div class="desc-preview">
+            <p>AI, 인공지능 최적화 웹페이지 기획, 디자인, 배포</p>
+            <p>AI 기반 전략으로 웹페이지 성과를 극대화하세요.</p>
+            <p>기획부터 디자인, 배포까지 전 과정 원스톱 지원!</p>
+          </div>
+          <div class="desc-full" style="display:none;">
+            <p>AI, 인공지능 최적화 웹페이지 기획, 디자인, 배포<br>
+            AI 기반 전략으로 웹페이지 성과를 극대화하세요.<br>
+            기획부터 디자인, 배포까지 전 과정 원스톱 지원! 방문자 행동을 분석해 전환율을 높입니다. 당신의 웹페이지,랜딩페이지를  이제 인공지능에 최적화 하십시오.<br>
+            기간. 난이도에 따라, 1개월~3개월<br>
+            가격<br>
+            1. 브랜드, 제품, 예약, 구매, 챗봇 : 500만<br>
+            2. 브랜드, 제품, 예약, 구매, 챗봇 + 로그인인증 : 700만<br>
+            3. 브랜드, 제품, 예약, 구매, 챗봇 + 로그인인증 + DB  + 고객관리 : 1000만</p>
+          </div>
+          <button class="more-btn">더보기</button>
+        </div>
+      </div>
+      <!-- 제품 4 -->
+      <div class="product-card">
+        <img src="images/pd4.jpg" alt="브랜드 Naming Package" class="product-img">
+        <div class="product-desc">
+          <div class="desc-preview">
+            <p>현존 최고수준의 브랜드 Name Package</p>
+            <p>창업자의 철학을 담아 직관적이고 감각적인 네이밍을 만들어드립니다.</p>
+            <p>브랜드 이름, 슬로건, 약속, 페르소나 등 브랜드전략의 기초를 만들어드립니다.</p>
+          </div>
+          <div class="desc-full" style="display:none;">
+            <p>현존 최고수준의 브랜드 Name Package<br>
+            창업자의 철학을 담아 <b>직관적이고 감각적인 네이밍</b>을 만들어드립니다.<br>
+            스시도쿠 겐, 견체공학, 헤겔의 빛, 신성의 숲, 쁘띠쿠아, 홍국시, 도찜계찜, age button등 듣기만 하면 잊을수 없는 브랜드 이름을 지어드립니다<br>
+            브랜드 이름, 슬로건, 약속, 페르소나등 브랜드전략의 기초를 만들어드립니다.<br>
+            1. 브랜드 이름 대안 3가지  제시<br>
+            2. 고객 페르소나 정의<br>
+            3. 슬로건, 핵심 메시지, 브랜드 스토리 개발<br>
+            기간. 약 1개월 소요<br>
+            가격: 500만원 (중간계 기존 수강생은 30% 할인)</p>
+          </div>
+          <button class="more-btn">더보기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 제품 섹션 끝 -->
+
+  <!-- 고객 후기 섹션 시작: 6명의 자영업자 후기를 3x2로 보여줍니다. -->
+  <section class="review-section" id="review">
+    <!-- 후기 섹션 제목 -->
+    <h1 class="review-title">고객 후기</h1>
+    <!-- 후기 그리드 -->
+    <div class="review-grid">
+      <!-- 후기 1 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">
+          AI 상세페이지 덕분에 매출이 30% 늘었어요!<br>
+          고객들이 상품을 더 자세히 보고 구매하네요.<br>
+          정말 만족스러운 결과입니다.
+        </p>
+        <div class="review-author">- 김○○ (온라인쇼핑몰 대표)</div>
+      </div>
+      <!-- 후기 2 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">
+          쇼츠 영상 만들어주셔서 감사해요!<br>
+          조회수가 폭발적으로 늘어났고,<br>
+          신규 고객들이 계속 문의하고 있어요.
+        </p>
+        <div class="review-author">- 이○○ (카페 사장)</div>
+      </div>
+      <!-- 후기 3 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">
+          웹페이지 제작 정말 만족합니다!<br>
+          예약 시스템도 완벽하고,<br>
+          고객 관리가 훨씬 편해졌어요.
+        </p>
+        <div class="review-author">- 박○○ (헤어샵 원장)</div>
+      </div>
+      <!-- 후기 4 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">
+          브랜드 네이밍이 정말 센스있어요!<br>
+          고객들이 기억하기 쉽다고 하고,<br>
+          브랜드 인지도가 확실히 올랐습니다.
+        </p>
+        <div class="review-author">- 최○○ (음식점 사장)</div>
+      </div>
+      <!-- 후기 5 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">
+          AI 추천 시스템이 놀라워요!<br>
+          고객들이 원하는 상품을 정확히 찾고,<br>
+          재구매율이 2배로 늘었습니다.
+        </p>
+        <div class="review-author">- 정○○ (패션몰 대표)</div>
+      </div>
+      <!-- 후기 6 -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">
+          전문적이고 빠른 서비스에 감동했어요!<br>
+          복잡한 기능도 쉽게 설명해주시고,<br>
+          사업 성장에 큰 도움이 되었습니다.
+        </p>
+        <div class="review-author">- 김○○ (펜션 사장)</div>
+      </div>
+    </div>
+  </section>
+  <!-- 고객 후기 섹션 끝 -->
+
+  <!-- 사장님 인사말 섹션 시작: CEO 사진과 인사말을 좌우로 배치합니다. -->
+  <section class="greeting-section" id="greeting">
+    <!-- 인사말 섹션 제목 -->
+    <h1 class="greeting-title">CEO 인사말</h1>
+    <!-- 사장님 사진과 인사말을 좌우로 배치하는 컨테이너 -->
+    <div class="greeting-container">
+      <!-- 좌측: 사장님 사진 -->
+      <div class="greeting-image">
+        <img src="images/man3.jpg" alt="중간계 AI 스튜디오 대표 신병철" class="ceo-photo">
+      </div>
+      <!-- 우측: 인사말 텍스트 -->
+      <div class="greeting-content">
+        <!-- 4줄만 보이는 미리보기 -->
+        <div class="greeting-preview">
+          <p>소상공인과 자영업 사장님들의 성공, 그것이 저의 사명입니다.</p>
+          <p>안녕하십니까? 저는 지난 35년간 비즈니스와 마케팅 한길을 걸으며,</p>
+          <p>CJ, 배달의민족, 러쉬, 여기어때, 야나두, 일동제약, 커피에 반하다,</p>
+          <p>단꿈아이 등 수많은 기업과 브랜드에서 경영 자문과 마케팅 전략을...</p>
+        </div>
+        <!-- 전체 인사말 (처음에는 숨겨짐) -->
+        <div class="greeting-full" style="display:none;">
+          <p>안녕하십니까? 저는 노원에서 오곡자가제면하는 국수를 사랑하는 
+            신가네칼국수 주인장 김서현입니다.</p>
+          <p KBS '김영철의 동네 한바퀴'
+            KBS 2TV 생생정보
+            MBC 생방송오늘
+            MBC 생방송 오늘N
+            OBS 살맛나는세상에 소개된 노원 맛집 입니다.
+            헬로TV
+            
+            신가네는 노원구 하계동 을지병원 뒤에 있어요.
+            아침 8시에 문을 활짝 열어놓았습니다.
+            어느덧 23년차 되었네요.
+            
+            칼국수와 보리밥 그리고 수육으로 고객님과 만납니다.
+            칼국수면은 오곡을 넣어 자가제면 하고 있어요.
+            
+            저희집은 들깨칼국수가 시그니쳐이고
+            보리밥에 된장은 햇볕좋고 바람 좋은 강화도에서 국내산 백태로 봄에 담아 숙성시켜요.
+            
+            사람을 살리는 건강한 한그릇의 행복한 힐링 !!!
+            이것을 기억하고 감사한 마음으로 직원들과 함께 식사를 차립니다.
+            
+            날씨가 쌀쌀해 지면서 생굴보쌈이 인기에요.
+            해물파전은 언제나 생각나는 음식이죠.
+            
+          
+    
+            
+          </p>
+          <p class="ceo-signature">중간계 AI 스튜디오<br>대표 신병철</p>
+        </div>
+        <!-- 더보기/닫기 버튼 -->
+        <button class="greeting-toggle-btn">더보기</button>
+      </div>
+    </div>
+    <!-- 고객센터 연락처 안내 -->
+    <div class="contact-info">
+      <p class="contact-text">상담이 필요하시면, 중간계 고객센터로 연락주십시오.</p>
+      <p class="contact-phone">📞 02-6952-9454, 9455</p>
+    </div>
+  </section>
+  <!-- 사장님 인사말 섹션 끝 -->
+
+  <!-- 제품 더보기 버튼 동작을 위한 자바스크립트 -->
+  <script>
+    // 히어로 캐러셀 동작
+    let currentSlide = 0;
+    const slides = [];
+    window.addEventListener('DOMContentLoaded', function() {
+      // 히어로 캐러셀
+      const slideEls = document.querySelectorAll('.carousel-slide');
+      slideEls.forEach(s => slides.push(s));
+      const leftBtn = document.querySelector('.carousel-arrow.left');
+      const rightBtn = document.querySelector('.carousel-arrow.right');
+      function showSlide(idx) {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === idx);
+        });
+        currentSlide = idx;
+      }
+      leftBtn.addEventListener('click', function() {
+        let idx = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(idx);
+      });
+      rightBtn.addEventListener('click', function() {
+        let idx = (currentSlide + 1) % slides.length;
+        showSlide(idx);
+      });
+      setInterval(function() {
+        let idx = (currentSlide + 1) % slides.length;
+        showSlide(idx);
+      }, 3000);
+      showSlide(0);
+
+      // 제품 더보기 버튼
+      const moreBtns = document.querySelectorAll('.more-btn');
+      moreBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const card = btn.closest('.product-card');
+          const preview = card.querySelector('.desc-preview');
+          const full = card.querySelector('.desc-full');
+          if(full.style.display === 'none') {
+            full.style.display = 'block';
+            preview.style.display = 'none';
+            btn.textContent = '닫기';
+          } else {
+            full.style.display = 'none';
+            preview.style.display = 'block';
+            btn.textContent = '더보기';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html> 
