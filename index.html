@@ -528,6 +528,56 @@
         padding-left: 0;
       }
     }
+    /* --- 우하단 챗봇 버튼 스타일 --- */
+    .chatbot-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+      font-size: 1.8rem;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+    .chatbot-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+    }
+    .chatbot-button::before {
+      content: '챗봇';
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+      }
+      50% {
+        box-shadow: 0 4px 30px rgba(102, 126, 234, 0.7);
+      }
+    }
+    @media (max-width: 600px) {
+      .chatbot-button {
+        width: 56px;
+        height: 56px;
+        bottom: 20px;
+        right: 20px;
+      }
+      .chatbot-button::before {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -888,5 +938,12 @@
       });
     });
   </script>
+
+  <!-- 우하단 챗봇 버튼: 고객 상담을 위한 ChatGPT 연결 -->
+  <a href="https://chatgpt.com/g/g-68417278e2c4819189f54e38eca9dba9-btsenteo-ai-seutyudieo-v1" 
+     target="_blank" 
+     class="chatbot-button" 
+     title="AI 챗봇 상담">
+  </a>
 </body>
 </html> 
